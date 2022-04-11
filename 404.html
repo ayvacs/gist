@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+</head>
+
+<body>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function get (url) {
+            return $.ajax({"url": url, "async": false})
+        }
+
+        var path = location.pathname.replace("/", "")
+        var path = "3db84579866c099cdd5bb2ff37947cec"
+
+        var files = get("https://api.github.com/gists/" + path).responseJSON.files
+        for (i in files) {
+            var v = files[i]
+
+            console.log(i)
+            console.log(v)
+        }
+
+        console.log()
+    </script>
+</body>
+
+
+</html>
