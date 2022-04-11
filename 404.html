@@ -17,13 +17,35 @@
         var md = new Remarkable();
         var path = location.pathname.replace("/", "");
 
-        var files = get("https://api.github.com/gists/" + path).responseJSON.files;
+        var gist = get("https://api.github.com/gists/" + path).responseJSON
+        console.log(gist.owner)
+        var files = gist.files;
         for (i in files) {
             var v = files[i];
 
-            $("body").append(`<div class="gistcontent">${md.render(v.content)}</div>`);
+            $("body").append(`<div class="gist" id="${i}">${md.render(v.content)}</div>`);
+            document.getElementById(i).childNodes[0].outerHTML += `<img src="${gist.owner.avatar_url}" height=48> ${gist.owner.login}`;
         };
     </script>
+
+    <style>
+        body, html {
+            width: 100%;
+        }
+        .gist {
+            width: 50%;
+            text-align: center;
+            display: inline-block;
+        }
+
+        pre {
+            white-space: pre-wrap;       /* Since CSS 2.1 */
+            white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+        }
+    </style>
 </body>
 
 
