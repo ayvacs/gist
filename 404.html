@@ -3,6 +3,7 @@
 
 
 <head>
+    <base target="_blank">
 </head>
 
 <body>
@@ -10,32 +11,78 @@
     <script src="https://cdn.jsdelivr.net/remarkable/1.7.1/remarkable.min.js"></script>
 
     <script>
-        function get (url) {
-            return $.ajax({"url": url, "async": false});
-        };
-
         var md = new Remarkable();
         var path = location.pathname.replace("/", "");
+        if (window.location.hostname == "localhost") {
+            // local hosting fix
+            path = "a0c78395240ebf2ad8caf21614c85541";
+        };
 
-        var gist = get("https://api.github.com/gists/" + path).responseJSON
-        console.log(gist.owner)
+        if (path.length != 32) {
+            var gist = {
+                "files": {
+                    "gist.md": {
+                        "filename": "404.md",
+                        "type": "text/markdown",
+                        "language": "Markdown",
+                        "raw_url": "",
+                        "size": 81,
+                        "truncated": false,
+                        "content": "# 4o4 not found\n\nthe page you were looking for couldn't be found lol"
+                    }
+                },
+                "owner": {
+                    "login": "ayvacs",
+                    "avatar_url": "https://avatars.githubusercontent.com/u/74518502?v=4"
+                }
+            }
+        } else {
+            var gist = $.ajax({"url":"https://api.github.com/gists/" + path,"async":false}).responseJSON;
+        }
+
         var files = gist.files;
         for (i in files) {
             var v = files[i];
+            console.log(v);
 
-            $("body").append(`<div class="gist" id="${i}">${md.render(v.content)}</div>`);
-            document.getElementById(i).childNodes[0].outerHTML += `<img src="${gist.owner.avatar_url}" height=48> ${gist.owner.login}`;
+            var content = v.content
+            if (content.charAt(0) != "#") {
+                content = "# " + content
+            }
+
+            $("body").append(`<div class="gist" id="${i}">${md.render(content)}</div>`);
+            document.getElementById(i).childNodes[0].outerHTML += `<div class="author"><a href="https://github.com/${gist.owner.login}"><img class="pfp" src="${gist.owner.avatar_url}">&nbsp;&nbsp;@${gist.owner.login}</a></div>`;
         };
     </script>
 
     <style>
         body, html {
-            width: 100%;
+            background-color: rgb(32, 33, 36);
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
         }
+
+        a {
+            color: white;
+            font-weight: bold;
+        }
+
         .gist {
             width: 50%;
             text-align: center;
-            display: inline-block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .pfp {
+            height: 48px;
+            vertical-align: middle;
+            border-radius: 100%;
+        }
+
+        .author a {
+            text-decoration: none;
+            font-size: 24px;
         }
 
         pre {
