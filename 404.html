@@ -12,16 +12,17 @@
 
     <script>
         var md = new Remarkable();
-        var path = location.pathname.replace("/", "");
+        var path = location.pathname.replace("gist/","").replace("/","");
         if (window.location.hostname == "localhost") {
             // local hosting fix
             path = "a0c78395240ebf2ad8caf21614c85541";
         };
 
         if (path.length != 32) {
+            // if the gist doesn't exist:
             var gist = {
                 "files": {
-                    "gist.md": {
+                    "404.md": {
                         "filename": "404.md",
                         "type": "text/markdown",
                         "language": "Markdown",
