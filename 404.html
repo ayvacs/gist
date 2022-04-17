@@ -15,13 +15,7 @@
             return $.ajax({
                 url: url,
                 type: "GET",
-                async: false,
-                success: function(data){
-                    return data;
-                },
-                error: function(){
-                    return {"files":{"404.md":{"filename":"404.md","type":"text/markdown","language":"Markdown","raw_url":"","size":81,"truncated":false,"content":"# 4o4 not found\n\nthe page you were looking for couldn't be found lol"}},"owner":{"login":"ayvacs","avatar_url":"https://avatars.githubusercontent.com/u/74518502?v=4"}}
-                }
+                async: false
             }).responseJSON;
         }
 
@@ -29,7 +23,7 @@
         var path = location.pathname.replace("gist/","").replace("/","");
         if (window.location.hostname == "localhost") {
             // local hosting fix
-            path = "3db84579866c099cdd5bb2ff37947cec";
+            path = "a0c78395240ebf2ad8caf21614c85541";
         };
 
         var gist = getGistFromUrl("https://api.github.com/gists/" + path);
