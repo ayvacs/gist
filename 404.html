@@ -11,14 +11,6 @@
     <script src="https://cdn.jsdelivr.net/remarkable/1.7.1/remarkable.min.js"></script>
 
     <script>
-        function getGistFromUrl(url) {
-            return $.ajax({
-                url: url,
-                type: "GET",
-                async: false
-            }).responseJSON;
-        }
-
         var md = new Remarkable();
         var path = location.pathname.replace("gist/","").replace("/","");
         if (window.location.hostname == "localhost") {
@@ -26,7 +18,11 @@
             path = "a0c78395240ebf2ad8caf21614c85541";
         };
 
-        var gist = getGistFromUrl("https://api.github.com/gists/" + path);
+        var gist = $.ajax({
+            url: "https://api.github.com/gists/" + path,
+            type: "GET",
+            async: false
+        }).responseJSON
         
         var files = gist.files;
         for (i in files) {
